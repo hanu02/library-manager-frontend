@@ -7,40 +7,54 @@ import Books from './pages/Books';
 import Members from './pages/Members';
 import Borrow from './pages/Borrow';
 import Staffs from './pages/Staffs';
-import Geners from './pages/Geners';
+import Genres from './pages/Geners'; 
 import MainLayout from './layout/MainLayout';
 
 export default function App() {
+  // State to check if user is logged in
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  // Check token in localStorage when app starts
   useEffect(() => {
     const token = localStorage.getItem('token');
-    setIsLoggedIn(!!token); // true if token exists
+    if (token) {
+      setIsLoggedIn(true);
+    }
   }, []);
 
+  // Function to log out
   const handleLogout = () => {
-    localStorage.removeItem('token'); // clear token
+    localStorage.removeItem('token'); // remove token
     setIsLoggedIn(false);             // redirect to login
   };
 
   return (
     <Routes>
-      {/* Public route */}
-      <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
-
-      {/* Protected routes */}
+      {/* Public route: Login page */}
       <Route
-        element={isLoggedIn ? <MainLayout handleLogout={handleLogout} /> : <Navigate to="/login" />}
+        path="/login"
+        element={<Login setIsLoggedIn={setIsLoggedIn} />}
+      />
+
+      {/* Protected routes: only visible if logged in */}
+      <Route
+        element={
+          isLoggedIn ? (
+            <MainLayout handleLogout={handleLogout} />
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
       >
         <Route path="/" element={<Dashboard />} />
         <Route path="/books" element={<Books />} />
         <Route path="/members" element={<Members />} />
         <Route path="/borrow" element={<Borrow />} />
-        <Route path="/geners" element={<Geners />} />
+        <Route path="/genres" element={<Genres />} />
         <Route path="/staffs" element={<Staffs />} />
       </Route>
 
-      {/* Not found */}
+      {/* Page not found */}
       <Route path="*" element={<h1>Page not found</h1>} />
     </Routes>
   );

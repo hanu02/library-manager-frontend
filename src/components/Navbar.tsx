@@ -1,13 +1,19 @@
 import { NavLink, useNavigate } from 'react-router-dom';
-import React from 'react';
 
-export default function Navbar() {
+type NavbarProps = {
+  handleLogout?: () => void; // optional if you want to pass it from parent
+};
+
+export default function Navbar({ handleLogout }: NavbarProps) {
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/login');
-  };
+  // If handleLogout not passed as prop, define a default one
+  const logout = handleLogout
+    ? handleLogout
+    : () => {
+        localStorage.removeItem('token');
+        navigate('/login');
+      };
 
   return (
     <div
@@ -52,7 +58,7 @@ export default function Navbar() {
           Borrow
         </NavLink>
         <NavLink
-          to="/geners"
+          to="/genres"
           className={({ isActive }) =>
             isActive ? 'nav-link active' : 'nav-link text-dark'
           }
@@ -70,10 +76,7 @@ export default function Navbar() {
       </nav>
 
       {/* Logout button */}
-      <button
-        className="btn btn-danger mt-auto"
-        onClick={handleLogout}
-      >
+      <button className="btn btn-danger mt-auto" onClick={logout}>
         Logout
       </button>
     </div>

@@ -1,5 +1,3 @@
-// src/pages/Dashboard.tsx
-import React from "react";
 
 const Dashboard = () => {
   return (

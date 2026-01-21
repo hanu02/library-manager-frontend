@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { apiRequest } from "../api/axios";
 
 const Books = () => {
